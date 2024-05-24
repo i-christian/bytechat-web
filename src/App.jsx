@@ -7,7 +7,7 @@ import SidebarDesktop from "./components/SidebarDesktop";
 import MessageList from "./components/MessageList";
 import ChatInput from "./components/ChatInput";
 
-function App() {
+const App = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [currentRoom, setCurrentRoom] = useState("General");

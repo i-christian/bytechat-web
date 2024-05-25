@@ -31,7 +31,7 @@ const App = () => {
     setSocket(socket);
 
     socket.on("connect", () => {
-      setName(`user-${socket.id}`);
+      setName(`anon-${socket.id}`);
       setConnected(true);
       socket.emit("join", currentRoom);
     });
@@ -79,7 +79,7 @@ const App = () => {
       <section className="h-screen p-4 bg-ctp-crust flex flex-col flex-grow justify-end overflow-hidden">
         <header className="bg-ctp-base rounded-t-lg sticky top-0 z-40">
           <div className="hidden lg:flex justify-center items-center gap-x-6 bg-ctp-mantle px-2 sm:px-6">
-            <h1 className="text-2xl text-white font-bold my-4">{currentRoom}</h1>
+            <h1 className="text-xl text-white font-bold my-4">{currentRoom}</h1>
           </div>
           <div className="lg:hidden flex justify-between items-center bg-ctp-mantle px-2 sm:px-6">
             <button type="button" className="-m-2.5 p-2.5 text-gray-400" onClick={() => setSidebarOpen(true)}>

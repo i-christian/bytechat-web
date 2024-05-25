@@ -17,6 +17,8 @@ const App = () => {
   const onceRef = useRef(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const lastMessageRef = useRef(null);
+  const messageListRef = useRef(null);
+  const [sidebarWidth, setSidebarWidth] = useState(0);
 
   useEffect(() => {
     setMessages([]);
@@ -52,6 +54,20 @@ const App = () => {
     });
   }, []);
 
+  useEffect(() => {
+    const updateSidebarWidth = () => {
+      const sidebar = document.querySelector(".sidebar");
+      if (sidebar) {
+        const width = sidebar.getBoundingClientRect().width;
+        setSidebarWidth(width);
+      }
+    };
+
+    updateSidebarWidth();
+    window.addEventListener("resize", updateSidebarWidth);
+    return () => window.removeEventListener("resize", updateSidebarWidth);
+  }, []);
+
   const sendMessage = (e) => {
     e.preventDefault();
     socket?.emit("message", { text: input, room: currentRoom });
@@ -67,22 +83,24 @@ const App = () => {
   const rooms = ["General", "Programming", "Games", "Sports"];
 
   return (
-    <div className="h-screen w-screen flex bg-ctp-crust text-ctp-text overflow-hidden relative">
+    <div className="h-screen w-screen bg-ctp-crust text-ctp-text overflow-hidden relative flex">
+      <SidebarDesktop
+        rooms={rooms}
+        currentRoom={currentRoom}
+        setCurrentRoom={setCurrentRoom}
+        className="hidden lg:flex lg:flex-col fixed top-0 left-0 h-full bg-ctp-mantle z-40"
+      />
+
       <Sidebar
         rooms={rooms}
         currentRoom={currentRoom}
         setCurrentRoom={setCurrentRoom}
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
-        className="absolute left-0 top-0 bottom-0 w-64 bg-ctp-mantle z-40"
+        className={`h-full ${sidebarOpen ? "w-1/5" : "w-2/5"} bg-ctp-mantle z-40`}
       />
-      <SidebarDesktop
-        rooms={rooms}
-        currentRoom={currentRoom}
-        setCurrentRoom={setCurrentRoom}
-        className="hidden lg:flex lg:flex-col fixed top-0 left-0 h-full w-64 bg-ctp-mantle z-40"
-      />
-      <section className="flex flex-col flex-1 bg-ctp-crust overflow-y-auto">
+
+      <div className="flex flex-col flex-1">
         <header className="bg-ctp-mantle sticky top-0 z-40">
           <div className="hidden lg:flex justify-center items-center gap-x-6 px-2 sm:px-6">
             <h1 className="text-xl text-white font-bold my-4">{currentRoom}</h1>
@@ -95,21 +113,21 @@ const App = () => {
             <h1 className="text-sm font-semibold leading-6 text-white">{currentRoom}</h1>
           </div>
         </header>
-        <div className="flex-1 p-4">
-          <MessageList messages={messages} currentUser={name} lastMessageRef={lastMessageRef} />
-          <div className="mt-auto">
-            <ChatInput input={input} setInput={setInput} sendMessage={sendMessage} />
+        <section className="flex-1 bg-ctp-crust overflow-y-auto relative" ref={messageListRef}>
+          <div className="p-4">
+            <MessageList messages={messages} currentUser={name} lastMessageRef={lastMessageRef} />
           </div>
-        </div>
-      </section>
-      <button
-        className="scroll-to-bottom-button fixed bottom-4 right-4 bg-gray-800 text-white rounded-full w-10 h-10 flex items-center justify-center"
-        onClick={scrollToBottom}
-      >
-        ↓
-      </button>
+        </section>
+        <footer className="bg-inherit py-2">
+              <div className="max-w-screen-lg mx-auto bg-ctp-crust px-4 py-2 mt-4 mb-2 rounded-md">
+  <ChatInput input={input} setInput={setInput} sendMessage={sendMessage} />
+</div>
+
+        </footer>
+      </div>
     </div>
   );
 };
 
 export default App;
+

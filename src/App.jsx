@@ -66,24 +66,28 @@ const App = () => {
 
   const rooms = ["General", "Programming", "Games", "Sports"];
 
-
   return (
-  <main className="h-screen w-screen flex flex-col text-ctp-text">
-    <div className="flex flex-1">
+    <div className="h-screen w-screen flex bg-ctp-crust text-ctp-text overflow-hidden relative">
       <Sidebar
         rooms={rooms}
         currentRoom={currentRoom}
         setCurrentRoom={setCurrentRoom}
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
+        className="absolute left-0 top-0 bottom-0 w-64 bg-ctp-mantle z-40"
       />
-      <SidebarDesktop rooms={rooms} currentRoom={currentRoom} setCurrentRoom={setCurrentRoom} />
-      <section className="flex flex-col flex-grow w-full">
-        <header className="bg-ctp-mantle rounded-t-lg sticky top-0 z-40 w-full">
-          <div className="hidden lg:flex justify-center items-center gap-x-6 bg-ctp-mantle px-2 sm:px-6">
+      <SidebarDesktop
+        rooms={rooms}
+        currentRoom={currentRoom}
+        setCurrentRoom={setCurrentRoom}
+        className="hidden lg:flex lg:flex-col fixed top-0 left-0 h-full w-64 bg-ctp-mantle z-40"
+      />
+      <section className="flex flex-col flex-1 bg-ctp-crust overflow-y-auto">
+        <header className="bg-ctp-mantle sticky top-0 z-40">
+          <div className="hidden lg:flex justify-center items-center gap-x-6 px-2 sm:px-6">
             <h1 className="text-xl text-white font-bold my-4">{currentRoom}</h1>
           </div>
-          <div className="lg:hidden flex justify-between items-center bg-ctp-mantle px-2 sm:px-6">
+          <div className="lg:hidden flex justify-between items-center px-2 sm:px-6">
             <button type="button" className="-m-2.5 p-2.5 text-gray-400" onClick={() => setSidebarOpen(true)}>
               <span className="sr-only">Open sidebar</span>
               <Bars3Icon className="h-6 w-6" aria-hidden="true" />
@@ -91,17 +95,21 @@ const App = () => {
             <h1 className="text-sm font-semibold leading-6 text-white">{currentRoom}</h1>
           </div>
         </header>
-         <div className="flex-grow bg-ctp-crust overflow-hidden flex flex-col-reverse" style={{ padding: '0 16px' }}>
-           <ChatInput input={input} setInput={setInput} sendMessage={sendMessage} style={{ marginBottom: '8px' }} />
-           <MessageList messages={messages} currentUser={name} lastMessageRef={lastMessageRef} />
+        <div className="flex-1 p-4">
+          <MessageList messages={messages} currentUser={name} lastMessageRef={lastMessageRef} />
+          <div className="mt-auto">
+            <ChatInput input={input} setInput={setInput} sendMessage={sendMessage} />
           </div>
-
+        </div>
       </section>
+      <button
+        className="scroll-to-bottom-button fixed bottom-4 right-4 bg-gray-800 text-white rounded-full w-10 h-10 flex items-center justify-center"
+        onClick={scrollToBottom}
+      >
+        ↓
+      </button>
     </div>
-  </main>
-);
-
-
+  );
 };
 
 export default App;

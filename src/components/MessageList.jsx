@@ -31,7 +31,7 @@ const MessageList = ({ messages, currentUser, lastMessageRef }) => {
             ref={index === messages.length - 1 ? lastMessageRef : null}
             className={`mb-4 flex ${isCurrentUser ? 'justify-end' : 'justify-start'}`}
           >
-            <div className={`p-3 rounded-lg max-w-xs ${isCurrentUser ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-900'}`}>
+            <div className={`p-3 max-w-md ${isCurrentUser ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-900'} rounded-lg shadow-md`}>
               <div className="flex flex-col">
                 <div className="flex flex-row justify-between items-center mb-1">
                   <p className={`text-sm font-semibold ${isCurrentUser ? 'text-white' : `text-${colorForName(msg.user)}`}`}>

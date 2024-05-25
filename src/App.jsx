@@ -66,8 +66,10 @@ const App = () => {
 
   const rooms = ["General", "Programming", "Games", "Sports"];
 
+
   return (
-    <main className="h-screen w-screen flex text-ctp-text">
+  <main className="h-screen w-screen flex flex-col text-ctp-text">
+    <div className="flex flex-1">
       <Sidebar
         rooms={rooms}
         currentRoom={currentRoom}
@@ -76,8 +78,8 @@ const App = () => {
         setSidebarOpen={setSidebarOpen}
       />
       <SidebarDesktop rooms={rooms} currentRoom={currentRoom} setCurrentRoom={setCurrentRoom} />
-      <section className="h-screen p-4 bg-ctp-crust flex flex-col flex-grow justify-end overflow-hidden">
-        <header className="bg-ctp-base rounded-t-lg sticky top-0 z-40">
+      <section className="flex flex-col flex-grow w-full">
+        <header className="bg-ctp-mantle rounded-t-lg sticky top-0 z-40 w-full">
           <div className="hidden lg:flex justify-center items-center gap-x-6 bg-ctp-mantle px-2 sm:px-6">
             <h1 className="text-xl text-white font-bold my-4">{currentRoom}</h1>
           </div>
@@ -89,11 +91,17 @@ const App = () => {
             <h1 className="text-sm font-semibold leading-6 text-white">{currentRoom}</h1>
           </div>
         </header>
-        <MessageList messages={messages} currentUser={name} lastMessageRef={lastMessageRef} />
-        <ChatInput input={input} setInput={setInput} sendMessage={sendMessage} />
+         <div className="flex-grow bg-ctp-crust overflow-hidden flex flex-col-reverse" style={{ padding: '0 16px' }}>
+           <ChatInput input={input} setInput={setInput} sendMessage={sendMessage} style={{ marginBottom: '8px' }} />
+           <MessageList messages={messages} currentUser={name} lastMessageRef={lastMessageRef} />
+          </div>
+
       </section>
-    </main>
-  );
+    </div>
+  </main>
+);
+
+
 };
 
 export default App;

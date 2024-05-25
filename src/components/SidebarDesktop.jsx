@@ -10,12 +10,13 @@ const SidebarDesktop = ({ rooms, currentRoom, setCurrentRoom }) => (
           <li
             key={room}
             className={classNames(
-              "relative flex justify-between gap-x-6 px-4 py-5 hover:bg-ctp-mantle sm:px-6 w-full rounded-md cursor-pointer",
-              currentRoom === room ? "bg-ctp-mantle" : ""
+              "px-4 py-3 rounded-md cursor-pointer transition-colors duration-300 ease-in-out",
+              "hover:bg-ctp-mantle focus:bg-ctp-mantle focus:outline-none",
+              currentRoom === room ? "bg-ctp-mantle" : "hover:bg-ctp-base"
             )}
             onClick={() => setCurrentRoom(room)}
           >
-            <div className="flex flex-row justify-between w-full align-middle">
+            <div className="flex justify-between items-center">
               <p className="text-lg font-medium text-ctp-text">{room}</p>
               <ChevronRightIcon className="h-6 w-6 text-ctp-blue" />
             </div>

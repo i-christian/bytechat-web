@@ -18,9 +18,12 @@ const MessageList = ({ messages, currentUser, lastMessageRef }) => {
     }
   };
 
+  // Sort messages by date before rendering
+  const sortedMessages = [...messages].sort((a, b) => new Date(a.date) - new Date(b.date));
+
   return (
     <ul className="p-4 overflow-auto max-h-full">
-      {messages?.map((msg, index) => {
+      {sortedMessages?.map((msg, index) => {
         const isCurrentUser = msg.user === currentUser;
         const isMessageExpanded = expandedMessages.includes(index);
         const messageText = isMessageExpanded || msg.text.length <= 200 ? msg.text : msg.text.slice(0, 200) + '...';
@@ -28,7 +31,7 @@ const MessageList = ({ messages, currentUser, lastMessageRef }) => {
         return (
           <li
             key={index}
-            ref={index === messages.length - 1 ? lastMessageRef : null}
+            ref={index === sortedMessages.length - 1 ? lastMessageRef : null}
             className={`mb-4 flex ${isCurrentUser ? 'justify-end' : 'justify-start'}`}
           >
             <div className={`p-3 max-w-md ${isCurrentUser ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-900'} rounded-lg shadow-md`}>
@@ -38,7 +41,7 @@ const MessageList = ({ messages, currentUser, lastMessageRef }) => {
                     {msg.user}
                   </p>
                   <p className={`text-xs ${isCurrentUser ? 'text-gray-300' : 'text-gray-600'}`}>
-                    {msg.date.toLocaleString()}
+                    {new Date(msg.date).toLocaleString()}
                   </p>
                 </div>
                 <p className="mt-1 text-sm break-words">{messageText}</p>

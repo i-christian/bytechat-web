@@ -51,7 +51,7 @@ const App = () => {
       <div className="flex flex-col flex-1">
         <Header currentRoom={state.currentRoom} setSidebarOpen={(open) => dispatch({ type: actionTypes.SET_SIDEBAR_OPEN, payload: open })} />
         <ChatSection messages={state.messages} name={state.name} lastMessageRef={lastMessageRef} messageListRef={messageListRef} />
-        <Footer input={state.input} setInput={(input) => dispatch({ type: actionTypes.SET_INPUT, payload: input })} sendMessage={sendMessage} />
+        <Footer input={state.input} setInput={(input) => dispatch({ type: actionTypes.SET_INPUT, payload: input })} sendMessage={sendMessage} state={state} currentRoom={state.currentRoom} />
       </div>
     </main>
   );

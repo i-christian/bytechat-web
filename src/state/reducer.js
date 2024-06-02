@@ -7,11 +7,14 @@ export const initialState = {
   connected: false,
   sidebarOpen: false,
   sidebarWidth: 0,
+  typing: false,
 };
 
 export const actionTypes = {
   SET_MESSAGES: "SET_MESSAGES",
   ADD_MESSAGE: "ADD_MESSAGE",
+  REMOVE_MESSAGE: "REMOVE_MESSAGE",
+  CLEAR_TYPING_MESSAGES: "CLEAR_TYPING_MESSAGES",
   SET_INPUT: "SET_INPUT",
   SET_CURRENT_ROOM: "SET_CURRENT_ROOM",
   SET_NAME: "SET_NAME",
@@ -19,6 +22,7 @@ export const actionTypes = {
   SET_CONNECTED: "SET_CONNECTED",
   SET_SIDEBAR_OPEN: "SET_SIDEBAR_OPEN",
   SET_SIDEBAR_WIDTH: "SET_SIDEBAR_WIDTH",
+  ADD_TYPING_MESSAGE: "ADD_TYPING_MESSAGE",
 };
 
 export const reducer = (state, action) => {
@@ -27,6 +31,26 @@ export const reducer = (state, action) => {
       return { ...state, messages: action.payload };
     case actionTypes.ADD_MESSAGE:
       return { ...state, messages: [...state.messages, action.payload] };
+    case actionTypes.ADD_TYPING_MESSAGE:
+      return {
+        ...state,
+        messages: [
+          ...state.messages.filter((msg) => !msg.isTyping),
+          action.payload,
+        ],
+      };
+    case actionTypes.CLEAR_TYPING_MESSAGES:
+      return {
+        ...state,
+        messages: state.messages.filter((msg) => !msg.isTyping),
+      };
+    case actionTypes.REMOVE_MESSAGE:
+      return {
+        ...state,
+        messages: state.messages.filter((msg) => msg !== action.payload),
+      };
+    case actionTypes.REMOVE_MESSAGE:
+      return { ...state, messages: state.messages.filter(msg => msg !== action.payload) };
     case actionTypes.SET_INPUT:
       return { ...state, input: action.payload };
     case actionTypes.SET_CURRENT_ROOM:
@@ -41,6 +65,8 @@ export const reducer = (state, action) => {
       return { ...state, sidebarOpen: action.payload };
     case actionTypes.SET_SIDEBAR_WIDTH:
       return { ...state, sidebarWidth: action.payload };
+    case actionTypes.SET_TYPING:
+      return { ...state, typing: action.payload };
     default:
       return state;
   }

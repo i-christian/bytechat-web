@@ -57,7 +57,7 @@ const useSocket = (state, dispatch, scrollToBottom) => {
       clearTimeout(typingTimeoutRef.current);
       typingTimeoutRef.current = setTimeout(() => {
         dispatch({ type: actionTypes.REMOVE_MESSAGE, payload: typingMsg });
-      }, 3000);
+      }, 30000);
     });
 
     return () => {

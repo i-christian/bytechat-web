@@ -1,72 +1,41 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { ArrowUpIcon } from "@heroicons/react/24/outline";
 
 const ChatInput = ({ input, setInput, sendMessage, state, currentRoom }) => {
-  const [typingTimeout, setTypingTimeout] = useState(null);
-  const [isFirstTyping, setIsFirstTyping] = useState(true);
   const typingRef = useRef(false);
-  const TYPING_DELAY = 60000;
 
-  useEffect(() => {
-    const handleKeyDown = () => {
-      if (!typingRef.current) {
-        typingRef.current = true;
-        if (isFirstTyping && state.socket) {
-          state.socket.emit("typing", currentRoom);
-          setIsFirstTyping(false);
-        }
-        if (typingTimeout) clearTimeout(typingTimeout);
-        setTypingTimeout(
-          setTimeout(() => {
-            typingRef.current = false;
-            setIsFirstTyping(true);
-            if (!isFirstTyping && state.socket) {
-              state.socket.emit("typing", currentRoom);
-            }
-          }, TYPING_DELAY)
-        );
+  const handleKeyDown = () => {
+    if (!typingRef.current && input.trim() !== "") {
+      typingRef.current = true;
+      if (state.socket) {
+        state.socket.emit("typing", currentRoom);
       }
-    };
-
-    const handleKeyUp = () => {
-      if (typingTimeout) clearTimeout(typingTimeout);
-      typingRef.current = false;
-      setTypingTimeout(
-        setTimeout(() => {
-          if (!typingRef.current && state.socket) {
-            state.socket.emit("typing", currentRoom);
-          }
-        }, TYPING_DELAY)
-      );
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("keyup", handleKeyUp);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("keyup", handleKeyUp);
-      if (typingTimeout) clearTimeout(typingTimeout);
-    };
-  }, [state.socket, currentRoom, typingTimeout, isFirstTyping]);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setIsFirstTyping(true);
-    if (typingTimeout) clearTimeout(typingTimeout);
-    setTypingTimeout(null);
-    sendMessage(e);
+    }
   };
 
   const handleChange = (e) => {
     const value = e.target.value;
     setInput(value);
     if (value === "") {
-      setIsFirstTyping(true);
-      if (typingTimeout) clearTimeout(typingTimeout);
-      setTypingTimeout(null);
+      typingRef.current = false;
+      if (state.socket) {
+        state.socket.emit("typing", currentRoom);
+      }
     }
   };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    sendMessage(e);
+  };
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [state.socket, currentRoom]);
 
   return (
     <form className="flex items-center h-11 relative" onSubmit={handleSubmit}>
@@ -74,6 +43,7 @@ const ChatInput = ({ input, setInput, sendMessage, state, currentRoom }) => {
         type="text"
         value={input}
         onChange={handleChange}
+        onKeyDown={handleKeyDown}
         className="flex-1 p-2 pl-4 pr-10 rounded-full bg-ctp-crust text-ctp-text placeholder-ctp-subtext0 border border-ctp-text"
         placeholder="Message..."
       />

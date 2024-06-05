@@ -30,7 +30,7 @@ const App = () => {
 
   const rooms = ["General", "Programming", "Games", "Sports"];
 
-  return (
+  let content = (
     <main className="h-screen w-screen bg-ctp-crust text-ctp-text overflow-hidden relative flex">
       <SidebarDesktop
         rooms={rooms}
@@ -54,7 +54,10 @@ const App = () => {
         <Footer input={state.input} setInput={(input) => dispatch({ type: actionTypes.SET_INPUT, payload: input })} sendMessage={sendMessage} state={state} currentRoom={state.currentRoom} />
       </div>
     </main>
+
   );
+
+  return content;
 };
 
 export default App;

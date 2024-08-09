@@ -36,7 +36,7 @@ const App = () => {
         rooms={rooms}
         currentRoom={state.currentRoom}
         setCurrentRoom={(room) => dispatch({ type: actionTypes.SET_CURRENT_ROOM, payload: room })}
-        className="hidden lg:flex lg:flex-col fixed top-0 left-0 h-full bg-ctp-mantle z-40"
+        className="hidden lg:flex lg:flex-col fixed top-0 left-0 h-full bg-ctp-mantle z-40 "
       />
 
       <Sidebar
